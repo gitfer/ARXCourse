@@ -1,0 +1,34 @@
+REST
+	cosa e'
+	6 principi
+	HATEOAS
+	Return statuses
+	Tools
+	Riferimenti:
+javascript
+	wat examples
+	hoisting
+	linting
+	Riferimenti:
+node
+	grunt
+	sass
+	Riferimenti:
+angularjs
+	ng-app
+	moduli
+	controller/filtri/servizi/direttive
+	$http/$resource
+	Riferimenti:
+aspnet.mvc
+	Riferimenti:
+signalr
+	Riferimenti:
+Testing:
+	unitario:
+		jasmine ecc./n(x)unit+moq/
+	integrazione:
+
+	UI:
+	pro/contro
+	selenium webdriver
