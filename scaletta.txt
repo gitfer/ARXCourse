@@ -1,30 +1,39 @@
-REST
-	cosa e'
-	6 principi
-	HATEOAS
-	Return statuses
+
+*) Pattern MVC
+	MVC: 2 modelli di interazione (passive view, supervising controller)
+*) ASPNET.MVC
+*) ASPNET.vNext (a.k.a. ASP.NET 5)
+*) Perchè usare ASPNET.MVC
+	Punti di forza di ASPNET.MVC 
+*) E allora perchè WebAPI?
+*) ASPNET.MVC+WebAPI
+*) Perchè REST e non SOAP +
+	Cosa è REST (6 principi di rest architectures) +
+	Cosa è JSON +
+	HATEOAS +
+	Rest best practices (Return statuses) +
 	Tools
-	Riferimenti:
-javascript
-	wat examples
-	hoisting
-	linting
-	Riferimenti:
-node
-	grunt
-	sass
-	Riferimenti:
-angularjs
+*) Client Web, desiderata
+*) JavaScript
+	cosa è, breve storia
+	Good Parts
+		JSLint, JSHint
+	Bad Parts: esempi + wat examples +
+	hoisting +
+*) JavaScript serverside: NodeJS
+	cosa è NodeJS
+	Automazione task ripetitivi: GruntJS
+	Package Management: Bower (through npm)
+*) UI concerns from a dev Point Of View
+	Preprocessori CSS: Sass e Less
+	Linguaggi costruiti su JavaScript: CoffeScript, TypeScript +
+*) angularjs +
 	ng-app
 	moduli
 	controller/filtri/servizi/direttive
 	$http/$resource
-	Riferimenti:
-aspnet.mvc
-	Riferimenti:
-signalr
-	Riferimenti:
-Testing:
+*) Applicazioni real-time: signalr +
+*) Testing +
 	unitario:
 		jasmine ecc./n(x)unit+moq/
 	integrazione:
