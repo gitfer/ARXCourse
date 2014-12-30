@@ -2,6 +2,8 @@
 *) Pattern MVC
 	MVC: 2 modelli di interazione (passive view, supervising controller)
 *) ASPNET.MVC
+	MVC4 (async controllers, bundling/minification, App_start e separate classes, DisplayModes based on requests, OAuth e OpenID)
+	MVC5 (bootstrap, authentication filters before authorization filters, filter overrides in higher scopes, attribute routing)
 *) ASPNET.vNext (a.k.a. ASP.NET 5)
 *) Perchè usare ASPNET.MVC
 	Punti di forza di ASPNET.MVC 
