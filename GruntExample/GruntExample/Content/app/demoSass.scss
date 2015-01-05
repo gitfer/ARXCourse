@@ -1,10 +1,46 @@
 ﻿$main-color: #ff6a00;
 
+.message {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+
+.success {
+  @extend .message;
+  border-color: green;
+}
+
+.error {
+  @extend .message;
+  border-color: red;
+}
+
+.warning {
+  @extend .message;
+  border-color: yellow;
+}
+
+@mixin set-border($roundSize: 10){
+    border-style:solid;
+    border-width: 1px;
+    -moz-border-radius: #{$roundSize}px;
+    -webkit-border-radius: #{$roundSize}px;
+    border-radius: #{$roundSize}px;
+}
+
 $sizes: 10 20 30 70;
 @each $size in $sizes {
-    .larghezza#{$size} {
+    .blocco#{$size} {
+        color: white;
+        @include set-border;
         width: #{$size * 1%};
+        height: 40px;
+        display: block;
+        background-color: darken($main-color, $size);
+        & > p {
+            color: red;
+        }
+
     }
 }
-    
-    

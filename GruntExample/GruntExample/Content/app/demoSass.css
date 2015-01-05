@@ -1,13 +1,71 @@
-.larghezza10 {
-  width: 10%; }
+.message, .success, .error, .warning {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333; }
 
-.larghezza20 {
-  width: 20%; }
+.success {
+  border-color: green; }
 
-.larghezza30 {
-  width: 30%; }
+.error {
+  border-color: red; }
 
-.larghezza70 {
-  width: 70%; }
+.warning {
+  border-color: yellow; }
+
+.blocco10 {
+  color: white;
+  border-style: solid;
+  border-width: 1px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 10%;
+  height: 40px;
+  display: block;
+  background-color: #cc5500; }
+  .blocco10 > p {
+    color: red; }
+
+.blocco20 {
+  color: white;
+  border-style: solid;
+  border-width: 1px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 20%;
+  height: 40px;
+  display: block;
+  background-color: #994000; }
+  .blocco20 > p {
+    color: red; }
+
+.blocco30 {
+  color: white;
+  border-style: solid;
+  border-width: 1px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 30%;
+  height: 40px;
+  display: block;
+  background-color: #662a00; }
+  .blocco30 > p {
+    color: red; }
+
+.blocco70 {
+  color: white;
+  border-style: solid;
+  border-width: 1px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 70%;
+  height: 40px;
+  display: block;
+  background-color: black; }
+  .blocco70 > p {
+    color: red; }
 
 /*# sourceMappingURL=demoSass.css.map */
