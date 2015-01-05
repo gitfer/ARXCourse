@@ -1,0 +1,6 @@
+namespace GruntExample.Areas.HelpPage.ModelDescriptions
+{
+    public class SimpleTypeModelDescription : ModelDescription
+    {
+    }
+}
