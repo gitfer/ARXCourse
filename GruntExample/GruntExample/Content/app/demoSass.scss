@@ -1,0 +1,10 @@
+﻿$main-color: #ff6a00;
+
+$sizes: 10 20 30 70;
+@each $size in $sizes {
+    .larghezza#{$size} {
+        width: #{$size * 1%};
+    }
+}
+    
+    
