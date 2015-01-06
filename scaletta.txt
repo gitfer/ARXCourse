@@ -9,18 +9,18 @@
 	Punti di forza di ASPNET.MVC 
 *) E allora perchè WebAPI?
 *) ASPNET.MVC+WebAPI
-*) Perchè REST e non SOAP +
-	Cosa è REST (6 principi di rest architectures) +
-	Cosa è JSON +
-	HATEOAS +
-	Rest best practices (Return statuses) +
+*) Perchè REST e non SOAP 
+	Cosa è REST (6 principi di rest architectures) 
+	Cosa è JSON 
+	HATEOAS 
+	Rest best practices (Return statuses) 
 	Tools
 *) Client Web, desiderata
 *) JavaScript
 	cosa è, breve storia
 	Good Parts
 		JSLint, JSHint
-	Bad Parts: esempi + wat examples +
+	Bad Parts: esempi + wat examples
 	hoisting +
 *) JavaScript serverside: NodeJS
 	cosa è NodeJS
@@ -28,7 +28,7 @@
 	Package Management: Bower (through npm)
 *) UI concerns from a dev Point Of View
 	Preprocessori CSS: Sass e Less
-	Linguaggi costruiti su JavaScript: CoffeScript, TypeScript +
+	Linguaggi costruiti su JavaScript: CoffeScript, TypeScript 
 *) angularjs +
 	ng-app
 	moduli
