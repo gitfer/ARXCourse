@@ -65,7 +65,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="views\404.html" />
     <Content Include="index.html" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="views\argomenti.html" />
+    <Content Include="views\argomento.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
