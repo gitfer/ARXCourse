@@ -2,14 +2,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-route.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-resource.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.js"></script>
+    
 </head>
-<body ng-app>
-    <h1>Hi</h1>
-    <h3>{{1 + 2}}</h3>
-    <h3>{{1 + 2 | currency}}</h3>
+    <body ng-app="arxivar">
+        <div style="display:block; clear:both">
+            <h1>Hi</h1>
+            <h3>{{1 + 2}}</h3>
+            
+            <!--Filtro-->
+            <!--<h3>{{1 + 2 | currency}}</h3>-->
+            
+            <!--2 way databinding-->
+            <!--<input type="text" data-ng-model="username" placeholder="Digita qualcosa" />
+            <section>Hello <span ng-bind="username"> </span></section>-->
+        </div>
+
+        <hr />
+        <a ng-href="#/argomenti">Iniziamo!</a>
+        <ng-view></ng-view>
+
+        <div ng-controller="argomentiCtrl as mainMenu">
+            <ul ng-repeat="argomento in argomenti" style="display: inline; width: 100px; float:left;">
+                <li><a ng-href="#/argomenti/{{argomento.id}}">{{argomento.nome}}</a></li>&nbsp;
+            </ul>
+        </div>
+
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-route.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-resource.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-sanitize.js"></script>
+<script src="Scripts/app.js"></script>
 </html>
