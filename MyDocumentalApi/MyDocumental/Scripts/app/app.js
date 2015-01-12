@@ -4,6 +4,6 @@ angular.module('myDocumental').controller('mainController', ['$scope', '$resourc
     $scope.prova = 'aaa';
     var Values = $resource('http://localhost:49860/api/values', {});
     Values.query({}, function (data) {
-            console.log(data);
-        });
+        $scope.valori = data;
+    });
 }]);
