@@ -34,8 +34,14 @@
         <hr />
         <div ng-controller="mainController">
             {{valori}}
-            <input type="text" ng-model="myInput" placeholder="Digita qualcosa"/>
-            <button ng-click="sendMessageToServer(myInput)">Send Message to server</button>
+            <div class="form-group" ng-form name="myForm" ng-init="submitted=false">
+                <input type="text" ng-model="myInput" name="campoPerServer" placeholder="Digita qualcosa" required/>
+                <div>
+                    <span style="color:red" ng-show="myForm.campoPerServer.$error.required">Digita qualcosa nel campo di testo</span>
+                </div>
+                <button ng-click="!myForm.campoPerServer.$error.required && sendMessageToServer(myInput); ">Send Message to server</button>
+
+            </div>
         </div>
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
