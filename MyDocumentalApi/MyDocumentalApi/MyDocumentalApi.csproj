@@ -92,8 +92,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Version0\TranslationController.cs" />
     <Compile Include="Controllers\Version0\ValuesController.cs" />
     <Compile Include="Controllers\Version1\ValuesController.cs" />
+    <Compile Include="Controllers\Version0\BaseController.cs" />
     <Compile Include="Controllers\Version2\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -115,6 +117,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyDocumentalTranslations\MyDocumentalTranslations.csproj">
+      <Project>{D4C975A6-DFBD-4B87-9042-EDB50ADE58E4}</Project>
+      <Name>MyDocumentalTranslations</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

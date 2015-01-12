@@ -8,7 +8,9 @@ using System.Web.Http.Cors;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
+using MyDocumentalApi.Controllers.Version2;
 using MyDocumentalApi.Services;
+using MyDocumentalTranslations;
 using SDammann.WebApi.Versioning;
 using SDammann.WebApi.Versioning.Configuration;
 using SDammann.WebApi.Versioning.Discovery;
@@ -36,7 +38,10 @@ namespace MyDocumentalApi
 
             dependencyContainer.Register((c, np) => new DefaultControllerIdentificationDetector(config));
             dependencyContainer.Register((c, np) => new DefaultRequestControllerIdentificationDetector(config));
-            dependencyContainer.Register<IMyValueService>(new MyValueService());
+            dependencyContainer.Register<IMyValueService, MyValueService>();
+            dependencyContainer.Register<ILanguageTranslator, LanguageTranslator>();
+            dependencyContainer.Register<ValuesController>()
+                .UsingConstructor(() => new ValuesController(new MyValueService(), new LanguageTranslator()));
 
             ApiVersioning.Configure()
                          .ConfigureRequestVersionDetector<DefaultRouteKeyVersionDetector>();
