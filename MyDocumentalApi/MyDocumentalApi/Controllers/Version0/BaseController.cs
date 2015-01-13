@@ -1,20 +1,21 @@
 using System.Web.Http;
 using MyDocumentalTranslations;
+using MyDocumentalTranslations.Services;
 
 namespace MyDocumentalApi.Controllers.Version0
 {
     public class BaseController : ApiController
     {
-        private readonly ILanguageTranslator _languageTranslator;
+        private readonly ILanguageTranslatorService _languageTranslatorService;
 
-        public BaseController(ILanguageTranslator languageTranslator)
+        public BaseController(ILanguageTranslatorService languageTranslatorService)
         {
-            _languageTranslator = languageTranslator;
+            _languageTranslatorService = languageTranslatorService;
         }
 
-        public ILanguageTranslator LanguageTranslator
+        public ILanguageTranslatorService LanguageTranslatorService
         {
-            get { return _languageTranslator; }
+            get { return _languageTranslatorService; }
         }
 
     }

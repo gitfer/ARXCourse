@@ -1,22 +1,34 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Web.Hosting;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using System.Web.Http.Cors;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
-using MyDocumentalApi.Controllers.Version2;
+using System.Web.Http.Routing;
+using MyDocumentalApi.Controllers.Version0;
+using MyDocumentalApi.Filters;
+using MyDocumentalApi.ParametersBinding;
 using MyDocumentalApi.Services;
 using MyDocumentalTranslations;
+using MyDocumentalTranslations.Services;
 using SDammann.WebApi.Versioning;
 using SDammann.WebApi.Versioning.Configuration;
 using SDammann.WebApi.Versioning.Discovery;
 using SDammann.WebApi.Versioning.Documentation;
 using SDammann.WebApi.Versioning.Request;
 using TinyIoC;
+using ValuesController = MyDocumentalApi.Controllers.Version2.ValuesController;
 
 namespace MyDocumentalApi
 {
@@ -26,7 +38,6 @@ namespace MyDocumentalApi
         {
             // Web API configuration and services
             config.EnableCors(new EnableCorsAttribute(ConfigurationManager.AppSettings["webapp"], "*", "get, post, put, delete"));
-
 
             var dependencyContainer = new TinyIoCContainer();
 
@@ -38,21 +49,59 @@ namespace MyDocumentalApi
 
             dependencyContainer.Register((c, np) => new DefaultControllerIdentificationDetector(config));
             dependencyContainer.Register((c, np) => new DefaultRequestControllerIdentificationDetector(config));
-            dependencyContainer.Register<IMyValueService, MyValueService>();
-            dependencyContainer.Register<ILanguageTranslator, LanguageTranslator>();
-            dependencyContainer.Register<ValuesController>()
-                .UsingConstructor(() => new ValuesController(new MyValueService(), new LanguageTranslator()));
+
+            RegisterServices(dependencyContainer);
+            RegisterControllers(dependencyContainer);
 
             ApiVersioning.Configure()
                          .ConfigureRequestVersionDetector<DefaultRouteKeyVersionDetector>();
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+            ConfigParameterBindings(config);
+            ConfigApiRoutes(config);
+            ConfigFilters(config);
+
+        }
+
+        private static void ConfigParameterBindings(HttpConfiguration config)
+        {
+            config.ParameterBindingRules.Add(typeof (string[]),
+                descriptor => new CatchAllRouteParameterBinding(descriptor, '/'));
+        }
+
+        private static void ConfigFilters(HttpConfiguration config)
+        {
+            config.Filters.Add(new GenericErrorAttribute());
+        }
+
+        private static void ConfigApiRoutes(HttpConfiguration config)
+        {
+            config.Routes.MapHttpRoute(
+                name: "CatchAllApi",
+                routeTemplate: "api/v{version}/{controller}/{*parametri}",
+                defaults: new { },
+                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) }
+                );
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/v{version}/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+                defaults: new {id = RouteParameter.Optional}
+                );
+        }
+
+
+        private static void RegisterControllers(TinyIoCContainer dependencyContainer)
+        {
+            dependencyContainer.Register<ValuesController>()
+                .UsingConstructor(() => new ValuesController(new MyValueService(), new LanguageTranslatorServiceService()));
+        }
+
+        private static void RegisterServices(TinyIoCContainer dependencyContainer)
+        {
+            dependencyContainer.Register<IMyValueService, MyValueService>();
+            dependencyContainer.Register<ILanguageTranslatorService, LanguageTranslatorServiceService>();
         }
 
 
@@ -126,4 +175,67 @@ namespace MyDocumentalApi
             }
         }
     }
+
+    public class MyDefaultVersionDetector : RouteKeyVersionDetector, IRequestVersionDetector 
+    {
+        private const string DefaultRouteKey = "version";
+
+        public ApiVersion GetVersion(HttpRequestMessage requestMessage)
+        {
+            if (requestMessage == null)
+            {
+                throw new ArgumentNullException("requestMessage");
+            }
+
+            IHttpRouteData routeData = requestMessage.GetRouteData();
+            if (routeData == null)
+            {
+                return default(ApiVersion);
+            }
+
+            ApiVersion apiVersion = this.GetVersion(requestMessage);
+            return new SemVerApiVersion(new Version("0.0"));
+            return this.GetControllerVersionFromRouteData(routeData);
+        }
+
+        protected override string RouteKey
+        {
+            get { return DefaultRouteKey; }
+        }
+    }
+
+    public class MyVersionedApiControllerSelector : VersionedApiControllerSelector
+    {
+        private readonly HttpConfiguration _configuration;
+
+        public MyVersionedApiControllerSelector(HttpConfiguration configuration) : base(configuration)
+        {
+            _configuration = configuration;
+        }
+
+        protected override HttpControllerDescriptor OnSelectController(HttpRequestMessage request)
+        {
+            HttpControllerDescriptor controller;
+            try
+            {
+                controller = base.SelectController(request);
+            }
+            catch (Exception ex)
+            {
+
+                ControllerIdentification cName = this.GetControllerIdentificationFromRequest(request);
+                String controllerName = cName.Name;
+                Assembly assembly = Assembly.LoadFile(String.Format("{0}\\{1}.dll", HostingEnvironment.ApplicationPhysicalPath, controllerName));
+                Type controllerType = assembly.GetTypes()
+                  .Where(i => typeof(IHttpController).IsAssignableFrom(i))
+                  .FirstOrDefault(i => i.Name.ToLower() == controllerName.ToLower() + "controller");
+                controller = new HttpControllerDescriptor(_configuration, controllerName, controllerType);
+            }
+            return controller;
+        }
+
+    }
+
+    //VersionedApiControllerSelector
+
 }

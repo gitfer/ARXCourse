@@ -1,6 +1,6 @@
-﻿namespace MyDocumentalTranslations
+﻿namespace MyDocumentalTranslations.Services
 {
-    public interface ILanguageTranslator
+    public interface ILanguageTranslatorService
     {
         string Translate(string langCode, string stringToTranslate);
         string Translate(string langCode);

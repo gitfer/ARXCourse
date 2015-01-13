@@ -92,14 +92,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Version0\TranslationController.cs" />
+    <Compile Include="Controllers\Version0\TranslationsController.cs" />
     <Compile Include="Controllers\Version0\ValuesController.cs" />
     <Compile Include="Controllers\Version1\ValuesController.cs" />
     <Compile Include="Controllers\Version0\BaseController.cs" />
     <Compile Include="Controllers\Version2\ValuesController.cs" />
+    <Compile Include="Filters\GenericErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ParametersBinding\CatchAllRouteParameterBinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMyValueService.cs" />
     <Compile Include="Services\MyValueService.cs" />
