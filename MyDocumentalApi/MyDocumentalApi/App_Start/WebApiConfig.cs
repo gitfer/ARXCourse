@@ -176,66 +176,65 @@ namespace MyDocumentalApi
         }
     }
 
-    public class MyDefaultVersionDetector : RouteKeyVersionDetector, IRequestVersionDetector 
-    {
-        private const string DefaultRouteKey = "version";
+    //public class MyDefaultVersionDetector : RouteKeyVersionDetector, IRequestVersionDetector 
+    //{
+    //    private const string DefaultRouteKey = "version";
 
-        public ApiVersion GetVersion(HttpRequestMessage requestMessage)
-        {
-            if (requestMessage == null)
-            {
-                throw new ArgumentNullException("requestMessage");
-            }
+    //    public ApiVersion GetVersion(HttpRequestMessage requestMessage)
+    //    {
+    //        if (requestMessage == null)
+    //        {
+    //            throw new ArgumentNullException("requestMessage");
+    //        }
 
-            IHttpRouteData routeData = requestMessage.GetRouteData();
-            if (routeData == null)
-            {
-                return default(ApiVersion);
-            }
+    //        IHttpRouteData routeData = requestMessage.GetRouteData();
+    //        if (routeData == null)
+    //        {
+    //            return default(ApiVersion);
+    //        }
 
-            ApiVersion apiVersion = this.GetVersion(requestMessage);
-            return new SemVerApiVersion(new Version("0.0"));
-            return this.GetControllerVersionFromRouteData(routeData);
-        }
+    //        ApiVersion apiVersion = this.GetVersion(requestMessage);
+    //        return new SemVerApiVersion(new Version("0.0"));
+    //        return this.GetControllerVersionFromRouteData(routeData);
+    //    }
 
-        protected override string RouteKey
-        {
-            get { return DefaultRouteKey; }
-        }
-    }
+    //    protected override string RouteKey
+    //    {
+    //        get { return DefaultRouteKey; }
+    //    }
+    //}
 
-    public class MyVersionedApiControllerSelector : VersionedApiControllerSelector
-    {
-        private readonly HttpConfiguration _configuration;
+    //public class MyVersionedApiControllerSelector : VersionedApiControllerSelector
+    //{
+    //    private readonly HttpConfiguration _configuration;
 
-        public MyVersionedApiControllerSelector(HttpConfiguration configuration) : base(configuration)
-        {
-            _configuration = configuration;
-        }
+    //    public MyVersionedApiControllerSelector(HttpConfiguration configuration) : base(configuration)
+    //    {
+    //        _configuration = configuration;
+    //    }
 
-        protected override HttpControllerDescriptor OnSelectController(HttpRequestMessage request)
-        {
-            HttpControllerDescriptor controller;
-            try
-            {
-                controller = base.SelectController(request);
-            }
-            catch (Exception ex)
-            {
+    //    protected override HttpControllerDescriptor OnSelectController(HttpRequestMessage request)
+    //    {
+    //        HttpControllerDescriptor controller;
+    //        try
+    //        {
+    //            controller = base.SelectController(request);
+    //        }
+    //        catch (Exception ex)
+    //        {
 
-                ControllerIdentification cName = this.GetControllerIdentificationFromRequest(request);
-                String controllerName = cName.Name;
-                Assembly assembly = Assembly.LoadFile(String.Format("{0}\\{1}.dll", HostingEnvironment.ApplicationPhysicalPath, controllerName));
-                Type controllerType = assembly.GetTypes()
-                  .Where(i => typeof(IHttpController).IsAssignableFrom(i))
-                  .FirstOrDefault(i => i.Name.ToLower() == controllerName.ToLower() + "controller");
-                controller = new HttpControllerDescriptor(_configuration, controllerName, controllerType);
-            }
-            return controller;
-        }
+    //            ControllerIdentification cName = this.GetControllerIdentificationFromRequest(request);
+    //            String controllerName = cName.Name;
+    //            Assembly assembly = Assembly.LoadFile(String.Format("{0}\\{1}.dll", HostingEnvironment.ApplicationPhysicalPath, controllerName));
+    //            Type controllerType = assembly.GetTypes()
+    //              .Where(i => typeof(IHttpController).IsAssignableFrom(i))
+    //              .FirstOrDefault(i => i.Name.ToLower() == controllerName.ToLower() + "controller");
+    //            controller = new HttpControllerDescriptor(_configuration, controllerName, controllerType);
+    //        }
+    //        return controller;
+    //    }
 
-    }
+    //}
 
-    //VersionedApiControllerSelector
 
 }

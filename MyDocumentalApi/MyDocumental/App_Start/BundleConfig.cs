@@ -28,13 +28,14 @@ namespace MyDocumental
                       );
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                      "~/Scripts/libs/angular.js")
-                      .Include("~/Scripts/libs/angular-route.js")
-                      .Include("~/Scripts/libs/angular-resource.js")
+                      "~/bower_components/angular/angular.js")
+                      .Include("~/bower_components/angular-route/angular-route.js")
+                      .Include("~/bower_components/angular-resource/angular-resource.js")
+                      .Include("~/bower_components/angular-cookies/angular-cookies.js")
+                      .Include("~/bower_components/angular-translate/angular-translate.js")
                       );
 
-            bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                      "~/Scripts/app/app.js"));
+            bundles.Add(new ScriptBundle("~/bundles/app").IncludeDirectory("~/Scripts/app","*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
@@ -42,7 +43,7 @@ namespace MyDocumental
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
