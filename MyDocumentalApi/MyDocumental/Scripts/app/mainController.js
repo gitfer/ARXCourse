@@ -10,7 +10,7 @@ app.controller('mainController', ['$scope', '$resource', '$log', '$translate', '
         }
     });
 
-    var Values = $resource('http://localhost:49860/api/v1/values', {});
+    var Values = $resource( arxivarAppConfig.rootApiVersion + 'values', {});
     Values.query({}, function (data) {
         $scope.valori = data;
     });
