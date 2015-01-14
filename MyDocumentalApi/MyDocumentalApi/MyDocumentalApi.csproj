@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Version0\LanguagesController.cs" />
     <Compile Include="Controllers\Version0\TranslationsController.cs" />
     <Compile Include="Controllers\Version0\ValuesController.cs" />
     <Compile Include="Controllers\Version1\ValuesController.cs" />

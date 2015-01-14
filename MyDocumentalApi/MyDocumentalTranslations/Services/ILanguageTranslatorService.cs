@@ -1,4 +1,6 @@
-﻿namespace MyDocumentalTranslations.Services
+﻿using System.Collections.Generic;
+
+namespace MyDocumentalTranslations.Services
 {
     public interface ILanguageTranslatorService
     {

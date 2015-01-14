@@ -70,7 +70,7 @@ namespace MyDocumentalTranslations.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Salva.
+        ///   Looks up a localized string similar to SalvaIT.
         /// </summary>
         internal static string Save {
             get {

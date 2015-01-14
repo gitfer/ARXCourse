@@ -1,10 +1,15 @@
 ﻿
-app.controller('mainController', ['$scope', '$resource', '$log', '$translate', 'ARXivarAppConfig', function ($scope, $resource, $log, $translate, ARXivarAppConfig) {
+app.controller('mainController', ['$scope', '$resource', '$log', '$translate', 'arxivarAppConfig', function ($scope, $resource, $log, $translate, arxivarAppConfig) {
 
-    $scope.languages = ['en', 'it'];
-    $scope.languageSelected = $scope.languages[$scope.languages.indexOf(ARXivarAppConfig.defaultLanguage)];
-    $translate.use($scope.languageSelected);
+    $scope.languages = [{ label: 'Inglese', val: 'en' }, { label: 'Italiano', val: 'it' }];
+    $scope.languageSelected = $scope.languages[1];
     
+    $scope.$watch('languageSelected', function (oldVal, newVal) {
+        if (newVal) {
+            $translate.use($scope.languageSelected.val);
+        }
+    });
+
     var Values = $resource('http://localhost:49860/api/v1/values', {});
     Values.query({}, function (data) {
         $scope.valori = data;

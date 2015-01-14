@@ -8,7 +8,7 @@ using MyDocumentalTranslations.Services;
 
 namespace MyDocumentalApi.Controllers.Version2
 {
-    public class ValuesController : Version0.ValuesController
+    public class ValuesController : BaseController
     {
         private readonly IMyValueService _myValueService;
 
@@ -21,7 +21,7 @@ namespace MyDocumentalApi.Controllers.Version2
         public IHttpActionResult Get()
         {
 
-            string[] valori = _myValueService.GetValues();
+            string[] valori = new string[] { "aaaV2", "bbbV2" };
             return Ok(valori);
         }
 

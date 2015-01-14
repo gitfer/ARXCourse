@@ -37,8 +37,8 @@ namespace MyDocumentalApi
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            config.EnableCors(new EnableCorsAttribute(ConfigurationManager.AppSettings["webapp"], "*", "get, post, put, delete"));
-
+            config.EnableCors(new EnableCorsAttribute(ConfigurationManager.AppSettings["webapp"], "*", "PUT, HEAD, OPTIONS, GET, POST, DELETE"));
+            
             var dependencyContainer = new TinyIoCContainer();
 
             // API VERSIONING

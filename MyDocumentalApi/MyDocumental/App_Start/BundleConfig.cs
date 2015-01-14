@@ -27,12 +27,17 @@ namespace MyDocumental
                       "~/Scripts/jquery.signalR-2.1.2.min.js")
                       );
 
+            bundles.Add(new ScriptBundle("~/bundles/libs")
+                      .Include("~/bower_components/lodash/dist/lodash.js")
+                      );
+
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                       "~/bower_components/angular/angular.js")
                       .Include("~/bower_components/angular-route/angular-route.js")
                       .Include("~/bower_components/angular-resource/angular-resource.js")
                       .Include("~/bower_components/angular-cookies/angular-cookies.js")
                       .Include("~/bower_components/angular-translate/angular-translate.js")
+                      .Include("~/bower_components/angular-translate-loader-url/angular-translate-loader-url.js")
                       );
 
             bundles.Add(new ScriptBundle("~/bundles/app").IncludeDirectory("~/Scripts/app","*.js", true));
