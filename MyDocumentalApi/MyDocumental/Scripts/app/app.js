@@ -7,7 +7,6 @@ app.factory('_', ['$window',
 ]);
 
 app.config(['$translateProvider', 'arxivarAppConfig', function ($translateProvider, arxivarAppConfig) {
-
     $translateProvider.useUrlLoader(arxivarAppConfig.rootApi + '/languages/');
     $translateProvider.preferredLanguage('it');
 }]);

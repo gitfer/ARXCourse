@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Cors;
@@ -16,11 +12,9 @@ using System.Web.Http.Dependencies;
 using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.Routing;
-using MyDocumentalApi.Controllers.Version0;
 using MyDocumentalApi.Filters;
 using MyDocumentalApi.ParametersBinding;
 using MyDocumentalApi.Services;
-using MyDocumentalTranslations;
 using MyDocumentalTranslations.Services;
 using SDammann.WebApi.Versioning;
 using SDammann.WebApi.Versioning.Configuration;
@@ -38,12 +32,12 @@ namespace MyDocumentalApi
         {
             // Web API configuration and services
             config.EnableCors(new EnableCorsAttribute(ConfigurationManager.AppSettings["webapp"], "*", "PUT, HEAD, OPTIONS, GET, POST, DELETE"));
-            
+
             var dependencyContainer = new TinyIoCContainer();
 
             // API VERSIONING
             // git@github.com:Sebazzz/SDammann.WebApi.Versioning.git Commit: 08ec8ed339b564996743ad0fff13953fe1e95b33
-            config.Services.Replace(typeof(IHttpControllerSelector), new VersionedApiControllerSelector(config));
+            config.Services.Replace(typeof(IHttpControllerSelector), new MyVersionedApiControllerSelector(config));
             config.Services.Replace(typeof(IApiExplorer), new VersionedApiExplorer(config));
             config.DependencyResolver = new DependencyResolver(dependencyContainer);
 
@@ -66,7 +60,7 @@ namespace MyDocumentalApi
 
         private static void ConfigParameterBindings(HttpConfiguration config)
         {
-            config.ParameterBindingRules.Add(typeof (string[]),
+            config.ParameterBindingRules.Add(typeof(string[]),
                 descriptor => new CatchAllRouteParameterBinding(descriptor, '/'));
         }
 
@@ -87,7 +81,7 @@ namespace MyDocumentalApi
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/v{version}/{controller}/{id}",
-                defaults: new {id = RouteParameter.Optional}
+                defaults: new { id = RouteParameter.Optional }
                 );
         }
 
@@ -176,65 +170,61 @@ namespace MyDocumentalApi
         }
     }
 
-    //public class MyDefaultVersionDetector : RouteKeyVersionDetector, IRequestVersionDetector 
-    //{
-    //    private const string DefaultRouteKey = "version";
+    public class MyVersionedApiControllerSelector : VersionedApiControllerSelector
+    {
+        private readonly HttpConfiguration _configuration;
 
-    //    public ApiVersion GetVersion(HttpRequestMessage requestMessage)
-    //    {
-    //        if (requestMessage == null)
-    //        {
-    //            throw new ArgumentNullException("requestMessage");
-    //        }
+        public MyVersionedApiControllerSelector(HttpConfiguration configuration)
+            : base(configuration)
+        {
+            _configuration = configuration;
+        }
 
-    //        IHttpRouteData routeData = requestMessage.GetRouteData();
-    //        if (routeData == null)
-    //        {
-    //            return default(ApiVersion);
-    //        }
+        protected override HttpControllerDescriptor OnSelectController(HttpRequestMessage request)
+        {
+            ControllerIdentification cName = this.GetControllerIdentificationFromRequest(request);
+            var majorVersion = cName.Version.ToString().Split('.')[0];
+            var minorVersion = cName.Version.ToString().Split('.')[1];
+            var prefixNamespace = "mydocumentalapi.controllers.";
+            string requestVersionMajorPlusMinor = string.Format("{0}version{1}_{2}", prefixNamespace, majorVersion, minorVersion);
+            string requestVersion = string.Format("{0}version{1}", prefixNamespace, majorVersion);
+            string defaultVersion = string.Format("{0}version0", prefixNamespace);
 
-    //        ApiVersion apiVersion = this.GetVersion(requestMessage);
-    //        return new SemVerApiVersion(new Version("0.0"));
-    //        return this.GetControllerVersionFromRouteData(routeData);
-    //    }
+            String controllerName = cName.Name;
+            Assembly assembly = Assembly.GetExecutingAssembly();
 
-    //    protected override string RouteKey
-    //    {
-    //        get { return DefaultRouteKey; }
-    //    }
-    //}
 
-    //public class MyVersionedApiControllerSelector : VersionedApiControllerSelector
-    //{
-    //    private readonly HttpConfiguration _configuration;
+            var controllerWithExactMajorMinorVersion = assembly
+                .GetTypes()
+                .FirstOrDefault(i => typeof(IHttpController).IsAssignableFrom(i)
+                            && i.Name.ToLower().Equals(string.Format("{0}controller", cName.Name.ToLower()))
+                            && i.Namespace.ToLower().Equals(requestVersionMajorPlusMinor)
+                );
+            // Esiste controller con versione Major+Minor esatta
+            if (controllerWithExactMajorMinorVersion != null)
+            {
+                return new HttpControllerDescriptor(_configuration, controllerName, controllerWithExactMajorMinorVersion);
+            }
+            // Se la minor è 0 cerco la major
+            if (minorVersion == "0")
+            {
 
-    //    public MyVersionedApiControllerSelector(HttpConfiguration configuration) : base(configuration)
-    //    {
-    //        _configuration = configuration;
-    //    }
+                var controllerWithExactVersion = assembly
+                    .GetTypes()
+                    .FirstOrDefault(i => typeof(IHttpController).IsAssignableFrom(i)
+                                && i.Name.ToLower().Equals(string.Format("{0}controller", cName.Name.ToLower()))
+                                && i.Namespace.ToLower().Equals(requestVersion)
+                    );
+                if (controllerWithExactVersion != null)
+                    return new HttpControllerDescriptor(_configuration, controllerName, controllerWithExactVersion);
+            }
 
-    //    protected override HttpControllerDescriptor OnSelectController(HttpRequestMessage request)
-    //    {
-    //        HttpControllerDescriptor controller;
-    //        try
-    //        {
-    //            controller = base.SelectController(request);
-    //        }
-    //        catch (Exception ex)
-    //        {
-
-    //            ControllerIdentification cName = this.GetControllerIdentificationFromRequest(request);
-    //            String controllerName = cName.Name;
-    //            Assembly assembly = Assembly.LoadFile(String.Format("{0}\\{1}.dll", HostingEnvironment.ApplicationPhysicalPath, controllerName));
-    //            Type controllerType = assembly.GetTypes()
-    //              .Where(i => typeof(IHttpController).IsAssignableFrom(i))
-    //              .FirstOrDefault(i => i.Name.ToLower() == controllerName.ToLower() + "controller");
-    //            controller = new HttpControllerDescriptor(_configuration, controllerName, controllerType);
-    //        }
-    //        return controller;
-    //    }
-
-    //}
-
+            Type defaultControllerType = assembly.GetTypes()
+                .Where(i => typeof(IHttpController).IsAssignableFrom(i))
+                .FirstOrDefault(i => i.Name.ToLower() == string.Format("{0}controller", cName.Name.ToLower())
+                                     && i.Namespace.ToLower().Equals(defaultVersion));
+            return new HttpControllerDescriptor(_configuration, controllerName, defaultControllerType);
+        }
+    }
 
 }
